@@ -1,40 +1,22 @@
-from backend.models.traffic_model import (
-    TrafficCount,
-    TrafficData,
-    AverageSpeed,
-    TrafficStats
-)
-
-
-
-
-
-
-
 from fastapi import FastAPI
 from sqlalchemy import text
+
 from backend.database.db import engine
 from backend.services.weather_service import get_weather
-from backend.services.traffic_service import (
-    get_traffic_count,
-    get_traffic_data,
-    get_average_speed,
-    get_traffic_stats
-)
 from backend.services.target_service import get_target_count
+from backend.api import traffic_routes
+
+
 app = FastAPI()
+
+# Include traffic API routes
+app.include_router(traffic_routes.router)
 
 
 @app.get("/")
 def home():
     return {"message": "SmartFlow Backend Running"}
 
-
-@app.get("/traffic-count", response_model=TrafficCount)
-def traffic_count():
-    return get_traffic_count()
-
-from typing import List
 
 @app.get("/dataset-info")
 def dataset_info():
@@ -53,6 +35,7 @@ def weather_live():
 @app.get("/target-count")
 def target_count():
     return get_target_count()
+
 
 @app.get("/first-trip")
 def first_trip():
@@ -108,12 +91,3 @@ def get_area(area_name: str):
         rows = result.fetchall()
 
     return [dict(row._mapping) for row in rows]
-
-
-@app.get("/average-speed", response_model=AverageSpeed)
-def average_speed():
-    return get_average_speed()
-
-@app.get("/traffic-stats", response_model=List[TrafficStats])
-def traffic_stats():
-    return get_traffic_stats()
