@@ -50,7 +50,7 @@ def login(user: UserLogin):
 
     return result
 
-@router.get("/auth/me")
+@router.get("/me")
 def get_me(
     current_user=Depends(get_current_user)
 ):
