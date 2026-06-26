@@ -32,3 +32,9 @@ def home():
     return {
         "message": "SmartFlow Backend Running"
     }
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
+    }
